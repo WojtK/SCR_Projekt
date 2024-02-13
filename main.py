@@ -8,11 +8,10 @@ import dht
 import utime
 import _thread
 
-
 # Konfiguracja WiFi
 ssid = "ssid"
 password = "password"
-#Konfiguracja pinow
+# Konfiguracja pinow
 dht_pin = machine.Pin(16)
 dht_sensor = dht.DHT11(dht_pin)
 photo_pin = ADC(Pin(26))
@@ -20,6 +19,7 @@ photo_pin = ADC(Pin(26))
 # Zakres wartosci dla fotorezystora
 wartosc_min = 0
 wartosc_max = 65535
+
 
 # Odczyt danych z czujnika DHT11
 def read_dht_data():
@@ -32,6 +32,7 @@ def read_dht_data():
         print("Błąd odczytu danych z czujnika DHT11:", str(e))
         return "Błąd odczytu", "Błąd odczytu"
 
+
 # Odczyt danych z fotorezystora
 def read_light():
     try:
@@ -42,6 +43,7 @@ def read_light():
         print("Błąd odczytu danych z fotorezystora:", str(e))
         return "Błąd odczytu"
 
+
 # Czyszczenie pliku na starcie procesu
 def clear_file():
     try:
@@ -51,12 +53,16 @@ def clear_file():
     except OSError as e:
         print("Błąd czyszczenia pliku:", str(e))
 
+
 # Cykliczny zapis do pliku i logowanie do konsoli danych
 def write_to_file(temperature, humidity, light):
     time = utime.localtime()
-    print(f"\nZapis do pliku -> Data {time[1]:02d}.{time[2]:02d} Czas {time[3]:02d}:{time[4]:02d}:{time[5]:02d} Temperatura: {temperature} °C, Wilgotnosc: {humidity} %, jasnosc: {light:.1f} %")
+    print(
+        f"\nZapis do pliku -> Data {time[1]:02d}.{time[2]:02d} Czas {time[3]:02d}:{time[4]:02d}:{time[5]:02d} Temperatura: {temperature} °C, Wilgotnosc: {humidity} %, jasnosc: {light:.1f} %")
     with open("sensor_data.txt", "a") as file:
-       file.write(f"{time[0]}-{time[1]:02d}-{time[2]:02d} {time[3]:02d}:{time[4]:02d}:{time[5]:02d};{temperature};{humidity};{light:.1f}\n")
+        file.write(
+            f"{time[0]}-{time[1]:02d}-{time[2]:02d} {time[3]:02d}:{time[4]:02d}:{time[5]:02d};{temperature};{humidity};{light:.1f}\n")
+
 
 # Generowanie HTML -> mozliwosc pobrania pliku txt z zapisanymi danymi
 def webpage():
@@ -89,6 +95,7 @@ def webpage():
         """
     return str(html)
 
+
 # Funkcja łączenia z siecią WiFi
 def connect():
     # Connect to WLAN
@@ -102,6 +109,7 @@ def connect():
     print(f'Połączono z adresem IP: {ip}')
     return ip
 
+
 # Funkcja zapisujaca dane cyklicznie w osobnym watku
 def save_data_periodically():
     while True:
@@ -113,7 +121,8 @@ def save_data_periodically():
             write_to_file(temperature, humidity, light)
 
         # Odczekanie podanej ilosci sekund przed kolejnym zapisem
-        utime.sleep(10)
+        utime.sleep(600)
+
 
 # Funkcja obsługujaca zadanie pobrania danych
 def download_data():
@@ -129,6 +138,7 @@ def download_data():
         print("Błąd odczytu pliku:", str(e))
         return "HTTP/1.0 500 Internal Server Error\r\n\r\nInternal Server Error"
 
+
 # Obsluga zadania HTTP
 
 
@@ -140,6 +150,7 @@ def open_socket(ip):
     connection.bind(address)
     connection.listen(1)
     return connection
+
 
 # Funkcja obsługująca serwer HTTP
 def serve(connection):
@@ -165,6 +176,7 @@ def serve(connection):
         client.sendall(response.encode())
         client.close()
 
+
 # Uruchomienie funkcji zapisujacej dane do pliku w osobnym watku
 save_data_thread = _thread.start_new_thread(save_data_periodically, ())
 
@@ -176,4 +188,3 @@ try:
     serve(connection)
 except KeyboardInterrupt:
     machine.reset()
-
