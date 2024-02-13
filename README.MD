@@ -9,7 +9,7 @@ Mikrokontroler umożliwia podejrzenie pomiarów poprzez prosty html:
 
 ![img_3.png](img_3.png)
 
-Co określony czas (domyślnie 10 minut) robiony jest zrzut do pliku txt z danymi. Plik jest w formacie odpowiednim do np. robienia wykresów. Zapis do pliku jest oddzielnym wątkiem od głównej pętli nasłuchującej
+Co określony czas (domyślnie 10 minut) robiony jest zrzut do pliku txt z danymi. Plik jest w formacie odpowiednim do np. robienia wykresów. Zapis do pliku jest oddzielnym wątkiem od głównej pętli nasłuchującej. Obecnie przy każdym restarcie płyki plik z danymi jest czyszczony, aby nie zaśmiecać pamięci RPI Pico.
 
 ![img_4.png](img_4.png)
 
