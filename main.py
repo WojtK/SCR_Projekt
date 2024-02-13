@@ -10,8 +10,8 @@ import _thread
 
 
 # Konfiguracja WiFi
-ssid = "UPC7312"
-password = "ssuPxw6bxFe4"
+ssid = "ssid"
+password = "password"
 #Konfiguracja pinow
 dht_pin = machine.Pin(16)
 dht_sensor = dht.DHT11(dht_pin)
